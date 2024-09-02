@@ -117,19 +117,18 @@ const Tryme = () => {
           ))}
         </div>
         <div className="grid grid-cols-7 grid-rows-6">
-          {dates.map((item, index) => (
-            <div
-              className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer ${
-                currentDate === item?.getDate() &&
-                currentMonth === item?.getMonth()
-                  ? "bg-[#45539D]"
-                  : " hover:bg-[#E9F0F5]"
-              }`}
-              key={index}
-            >
-              {item ? item.getDate() : ""}
-            </div>
-          ))}
+          {dates.map((item, index) => {
+            const isCurrentMonth = item.getMonth() === month;
+            const isToday = currentDate === item.getDate() && currentMonth === item.getMonth();
+            return (
+              <div
+                className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer ${ isToday ? "bg-[#45539D]" : isCurrentMonth ? "hover:bg-[#E9F0F5]" : "bg-gray-200" }`}
+                key={index}
+              >
+                {item ? item.getDate() : ""}
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
