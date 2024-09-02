@@ -1,5 +1,5 @@
 import './App.css'
-import Overlay from './components/Overlay'
+
 import Tryme from './components/Tryme'
 
 function App() {
@@ -7,9 +7,8 @@ function App() {
 
   return (
     <>
-    <div className='flex justify-around mt-10 bg-[#414E55] py-[90px]'>
+    <div className='flex justify-around bg-[#414E55] py-[38px]'>
       <Tryme/>
-      <Overlay/>
       </div>
     </>
   )

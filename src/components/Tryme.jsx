@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
+import { LuCalendarCheck } from "react-icons/lu";
 
 const Tryme = () => {
 
@@ -9,8 +10,9 @@ const Tryme = () => {
   const [dates, setDates] = useState([]);
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
+  const [selectedDate, setSelectedDate] = useState([])
 
-  console.log(dates);
+  // console.log(dates);
 
   const monthName = month !== null ? new Date(year, month).toLocaleString("en-US", { month: "short" }): "";
 
@@ -85,11 +87,22 @@ const Tryme = () => {
     getAllDaysInMonth(newYear, newMonth);
   };
 
+  const handleSelectedDate = (pickedDate) => {
+    
+    setSelectedDate(pickedDate)
+    console.log(pickedDate)
+  };
+  
+
   return (
     <div>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center ">
         <h1 className="text-white text-[1.3rem] font-black">try me</h1>
       </div>
+
+      <div className="flex gap-[45px]">
+
+    
       <div className="w-[502px] mt-9 bg-white rounded-xl p-5">
         <div className="flex justify-between items-center">
           <div className="flex gap-2">
@@ -123,13 +136,25 @@ const Tryme = () => {
             return (
               <div
                 className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer ${ isToday ? "bg-[#45539D]" : isCurrentMonth ? "hover:bg-[#E9F0F5]" : "bg-gray-200" }`}
-                key={index}
+                key={index} onClick={()=>handleSelectedDate(item)}
               >
                 {item ? item.getDate() : ""}
               </div>
             );
           })}
         </div>
+      </div>
+
+      <div className="mt-9 p-8 flex items-center justify-center flex-col">
+        <h1 className=" text-white">Date Picker</h1>
+        <div>
+          <div className="flex gap-5 border border-black py-4 px-2 items-center rounded-lg mt-4  bg-white">
+            <span> {`${selectedDate.getDate()}/${selectedDate.getMonth()}/${selectedDate.getFullYear()}`}</span>
+            <span><LuCalendarCheck/></span>
+          </div>
+        </div>
+      </div>
+
       </div>
     </div>
   );
