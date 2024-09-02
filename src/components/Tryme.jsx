@@ -3,28 +3,50 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
 const Tryme = () => {
-  const days = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
-  const [dates, setDates] = useState([
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21,
-    22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 1, 2, 3, 4,
-  ]);
+  const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+  const [dates, setDates] = useState([]);
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
 
-  const monthName =
-    month !== null
-      ? new Date(year, month).toLocaleString("en-US", { month: "short" })
-      : "";
+
+  console.log(dates)
+
+  const monthName = month !== null ? new Date(year, month).toLocaleString("en-US", { month: "short" }) : "";
 
   const getAllDaysInMonth = (year, month) => {
+    const date = new Date(year, month, 1);
+    const dates = [];
+    const startDay = date.getDay(); 
+    console.log("startDay"  , startDay)
+    
+    for (let i = 0; i < startDay; i++) {
+      dates.push(null); 
+    }
+
+    while (date.getMonth() === month) {
+      dates.push(new Date(date));
+      date.setDate(date.getDate() + 1);
+    }
+
+    const totalDays = dates.length;
+    const extraBoxes = 42 - totalDays;
+  
+    for (let i = 0; i < extraBoxes; i++) {
+      dates.push(null);
+    }
+  
+
+    setDates(dates);
     setYear(year);
     setMonth(month);
   };
 
-  const date = new Date();
+  const now = new Date();
+  const currentDate = now.getDate();
+  const currentMonth = now.getMonth();
 
   useEffect(() => {
-    getAllDaysInMonth(date.getFullYear(), date.getMonth());
+    getAllDaysInMonth(now.getFullYear(), now.getMonth());
   }, []);
 
   const handleNextClick = () => {
@@ -42,15 +64,14 @@ const Tryme = () => {
   const handlePrevClick = () => {
     let newMonth = month - 1;
     let newYear = year;
-  
+
     if (newMonth < 0) {
-      newMonth = 11; 
+      newMonth = 11;
       newYear -= 1;
     }
-  
+
     getAllDaysInMonth(newYear, newMonth);
   };
-  
 
   return (
     <div>
@@ -67,10 +88,9 @@ const Tryme = () => {
               <h1 className="text-[1.3rem] font-black">{year}</h1>
             </span>
           </div>
-
           <div className="flex gap-5">
             <span className="cursor-pointer">
-              <IoIosArrowBack onClick={handlePrevClick}/>
+              <IoIosArrowBack onClick={handlePrevClick} />
             </span>
             <span className="cursor-pointer">
               <IoIosArrowForward onClick={handleNextClick} />
@@ -84,13 +104,13 @@ const Tryme = () => {
             </span>
           ))}
         </div>
-        <div className="grid grid-cols-7 grid-rows-5">
+        <div className="grid grid-cols-7 grid-rows-6">
           {dates.map((item, index) => (
             <div
-              className="border border-[#D5D4DF] p-[20px] flex items-center justify-center"
+              className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer hover:bg-[#E9F0F5] ${currentDate === item?.getDate() && currentMonth === item?.getMonth() ? "bg-[#45539D]" : "null"}`}
               key={index}
             >
-              {item}
+              {item ? item.getDate() : ""}
             </div>
           ))}
         </div>
