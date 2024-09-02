@@ -3,24 +3,37 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoIosArrowForward } from "react-icons/io";
 
 const Tryme = () => {
+
   const days = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
   const [dates, setDates] = useState([]);
   const [year, setYear] = useState(null);
   const [month, setMonth] = useState(null);
 
+  console.log(dates);
 
-  console.log(dates)
-
-  const monthName = month !== null ? new Date(year, month).toLocaleString("en-US", { month: "short" }) : "";
+  const monthName = month !== null ? new Date(year, month).toLocaleString("en-US", { month: "short" }): "";
 
   const getAllDaysInMonth = (year, month) => {
+    
     const date = new Date(year, month, 1);
     const dates = [];
-    const startDay = date.getDay(); 
-    console.log("startDay"  , startDay)
-    
-    for (let i = 0; i < startDay; i++) {
-      dates.push(null); 
+
+    const prevYear = month === 0 ? year - 1 : year;
+    const prevMonth = month === 0 ? 11 : month - 1;
+
+    const firstDayOfMonth = new Date(year, month, 1).getDay();
+
+    const getDaysInMonth = (year, month) => {
+      return new Date(year, month + 1, 0).getDate();
+    };
+
+    const daysInPrevMonth = getDaysInMonth(prevYear, prevMonth);
+
+    console.log(daysInPrevMonth);
+
+    for (let i = firstDayOfMonth - 1; i >= 0; i--) {
+      dates.push(new Date(prevYear, prevMonth, daysInPrevMonth - i));
     }
 
     while (date.getMonth() === month) {
@@ -30,11 +43,10 @@ const Tryme = () => {
 
     const totalDays = dates.length;
     const extraBoxes = 42 - totalDays;
-  
-    for (let i = 0; i < extraBoxes; i++) {
-      dates.push(null);
+
+    for (let i = 1; i <= extraBoxes; i++) {
+      dates.push(new Date(year, month + 1, i));
     }
-  
 
     setDates(dates);
     setYear(year);
@@ -107,7 +119,12 @@ const Tryme = () => {
         <div className="grid grid-cols-7 grid-rows-6">
           {dates.map((item, index) => (
             <div
-              className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer hover:bg-[#E9F0F5] ${currentDate === item?.getDate() && currentMonth === item?.getMonth() ? "bg-[#45539D]" : "null"}`}
+              className={`border border-[#D5D4DF] p-[20px] flex items-center justify-center cursor-pointer ${
+                currentDate === item?.getDate() &&
+                currentMonth === item?.getMonth()
+                  ? "bg-[#45539D]"
+                  : " hover:bg-[#E9F0F5]"
+              }`}
               key={index}
             >
               {item ? item.getDate() : ""}
